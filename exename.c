@@ -62,15 +62,6 @@ static int once(char *buf, size_t n)
 }
 #endif
 
-#ifdef __OpenBSD__
-#endif
-
-#ifdef __sun
-#endif
-
-#ifdef __HAIKU__
-#endif
-
 #include "exename.h"
 
 char *exename(void)
