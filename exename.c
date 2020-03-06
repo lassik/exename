@@ -1,7 +1,6 @@
 // Copyright 2020 Lassi Kortela
 // SPDX-License-Identifier: ISC
 
-#include <errno.h>
 #include <stdlib.h>
 
 #include "exename.h"
@@ -43,6 +42,8 @@ static int once(char *buf, size_t n)
 #include <sys/types.h>
 
 #include <sys/sysctl.h>
+
+#include <errno.h>
 #endif
 
 #if defined(__FreeBSD__) || defined(__DragonFly__)
