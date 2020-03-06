@@ -1,3 +1,6 @@
+// Copyright 2020 Lassi Kortela
+// SPDX-License-Identifier: ISC
+
 #if defined(__APPLE__) && defined(__MACH__)
 #include <mach-o/dyld.h>
 #endif
