@@ -1,6 +1,10 @@
 // Copyright 2020 Lassi Kortela
 // SPDX-License-Identifier: ISC
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #if defined(__APPLE__) && defined(__MACH__)
 #include <mach-o/dyld.h>
 #endif
