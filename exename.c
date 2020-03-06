@@ -3,8 +3,6 @@
 
 #include <stdlib.h>
 
-#include "exename.h"
-
 #ifdef _WIN32
 #include <windows.h>
 static int once(char *buf, size_t n)
@@ -72,6 +70,8 @@ static int once(char *buf, size_t n)
 
 #ifdef __HAIKU__
 #endif
+
+#include "exename.h"
 
 char *exename(void)
 {
