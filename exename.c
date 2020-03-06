@@ -69,7 +69,7 @@ static int once(char *buf, size_t n)
     if (sysctl(mib, 4, buf, &nr, 0, 0) == 0) {
         return 1;
     }
-    return (errno == ENOMEM) : 0 : -1;
+    return (errno == ENOMEM) ? 0 : -1;
 }
 #endif
 
