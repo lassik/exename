@@ -1,31 +1,13 @@
 // Copyright 2020 Lassi Kortela
 // SPDX-License-Identifier: ISC
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#if defined(__APPLE__) && defined(__MACH__)
-#include <mach-o/dyld.h>
-#endif
-
-#ifdef __linux__
-#include <unistd.h>
-#endif
-
-#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__)   \
-    || defined(__NetBSD__)
-#include <sys/types.h>
-
-#include <sys/sysctl.h>
-#endif
-
 #include <errno.h>
 #include <stdlib.h>
 
 #include "exename.h"
 
 #ifdef _WIN32
+#include <windows.h>
 static int once(char *buf, size_t n)
 {
     DWORD nr = GetModuleFileNameA(NULL, buf, n);
@@ -37,6 +19,7 @@ static int once(char *buf, size_t n)
 #endif
 
 #if defined(__APPLE__) && defined(__MACH__)
+#include <mach-o/dyld.h>
 static int once(char *buf, size_t n)
 {
     uint32_t tmp = (uint32_t)n;
@@ -45,6 +28,7 @@ static int once(char *buf, size_t n)
 #endif
 
 #ifdef __linux__
+#include <unistd.h>
 static int once(char *buf, size_t n)
 {
     ssize_t nr = readlink("/proc/self/exe", buf, n);
@@ -53,6 +37,12 @@ static int once(char *buf, size_t n)
     }
     return (size_t)nr < n;
 }
+#endif
+
+#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__)
+#include <sys/types.h>
+
+#include <sys/sysctl.h>
 #endif
 
 #if defined(__FreeBSD__) || defined(__DragonFly__)
