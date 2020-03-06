@@ -92,7 +92,7 @@ char *exename(void)
     int ret;
 
     buf = NULL;
-    for (n = 64; n < 16384; n *= 2) {
+    for (n = 64; n <= 16384; n *= 2) {
         if (!(newbuf = realloc(buf, n))) {
             break;
         }
