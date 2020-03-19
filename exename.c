@@ -24,17 +24,15 @@ static int once(char *buf, size_t cap)
 }
 #endif
 
-#ifdef __linux__
-static const char procfs[] = "/proc/self/exe";
-#endif
-#ifdef __sun
-static const char procfs[] = "/proc/self/path/a.out";
-#endif
-
-#if defined(__linux__) || defined(__sun)
+#if defined(__linux__) || defined(__CYGWIN__) || defined(__sun)
 #include <unistd.h>
 static int once(char *buf, size_t cap)
 {
+#ifdef __sun
+    static const char procfs[] = "/proc/self/path/a.out";
+#else
+    static const char procfs[] = "/proc/self/exe";
+#endif
     ssize_t len = readlink(procfs, buf, cap);
     if (len == (ssize_t)-1) {
         return -1;
@@ -48,23 +46,15 @@ static int once(char *buf, size_t cap)
 #endif
 
 #if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__)
-#include <sys/types.h>
-
-#include <sys/sysctl.h>
-
 #include <errno.h>
-#endif
-
-#if defined(__FreeBSD__) || defined(__DragonFly__)
-static int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
-#endif
-#ifdef __NetBSD__
-static int mib[4] = { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
-#endif
-
-#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__)
+#include <sys/sysctl.h>
 static int once(char *buf, size_t cap)
 {
+#ifdef __NetBSD__
+    int mib[4] = { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
+#else
+    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
+#endif
     size_t len = cap;
     if (sysctl(mib, 4, buf, &len, 0, 0) == 0) {
         return 1;
