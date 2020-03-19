@@ -32,7 +32,11 @@ static int once(char *buf, size_t n)
     if (nr == (ssize_t)-1) {
         return -1;
     }
-    return (size_t)nr < n;
+    if ((size_t)nr < n) {
+        buf[nr] = 0;
+        return 1;
+    }
+    return 0;
 }
 #endif
 
