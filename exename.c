@@ -25,10 +25,17 @@ static int once(char *buf, size_t cap)
 #endif
 
 #ifdef __linux__
+static const char procfs[] = "/proc/self/exe";
+#endif
+#ifdef __sun
+static const char procfs[] = "/proc/self/path/a.out";
+#endif
+
+#if defined(__linux__) || defined(__sun)
 #include <unistd.h>
 static int once(char *buf, size_t cap)
 {
-    ssize_t len = readlink("/proc/self/exe", buf, cap);
+    ssize_t len = readlink(procfs, buf, cap);
     if (len == (ssize_t)-1) {
         return -1;
     }
